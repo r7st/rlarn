@@ -23,6 +23,304 @@ static void ocookie(void);
 static void ogold(int);
 static void ohome(void);
 
+
+void
+lookforvolobject(void)
+{
+        int    i, j;
+        if (c[TIMESTOP])
+                return;         /* can't find objects if time is stopped         */
+        i = item[playerx][playery];
+        if (i == 0)
+                return;
+        showcell(playerx, playery);
+        cursors();
+        yrepcount = 0;
+        switch (i) {
+        case OPOTION:
+                lprcat("\n\nYou have found a magic potion");
+                i = iarg[playerx][playery];
+                if (potionname[i][0] != 0)
+                        lprintf(" of%s", potionname[i]);
+                opotion(i);
+                break;
+
+        case OSCROLL:
+                lprcat("\n\nYou have found a magic scroll");
+                i = iarg[playerx][playery];
+                if (scrollname[i][0] != 0)
+                        lprintf(" of%s", scrollname[i]);
+                oscroll(i);
+                break;
+
+        case OBOOK:
+                lprcat("\n\nYou have found a book.");
+                obook();
+                break;
+
+        case OCOOKIE:
+                lprcat("\n\nYou have found a fortune cookie.");
+                ocookie();
+                break;
+
+        case OTHRONE:
+                if (nearbymonst())
+                        return;
+                lprintf("\n\nThere is %s here!", objectname[i]);
+                othrone(0);
+                break;
+
+        case OTHRONE2:
+                if (nearbymonst())
+                        return;
+                lprintf("\n\nThere is %s here!", objectname[i]);
+                othrone(1);
+                break;
+
+        case ODEADTHRONE:
+                lprintf("\n\nThere is %s here!", objectname[i]);
+                odeadthrone();
+                break;
+
+        case OSTAIRSUP:
+                lprcat("\n\nThere is a circular staircase here");
+                ostairs(1);     /* up */
+                break;
+
+        case OFOUNTAIN:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nThere is a fountain here");
+                ofountain();
+                break;
+
+        case OSTATUE:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nYou are standing in front of a statue");
+                ostatue();
+                break;
+
+        case OCHEST:
+                lprcat("\n\nThere is a chest here");
+                ochest();
+                break;
+        case OSCHOOL:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nYou have found the College of Larn.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g') {
+                        oschool();      /* the college of larn   */
+                } else
+                        lprcat(" stay here");
+                break;
+
+        case OMIRROR:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nThere is a mirror here");
+                omirror();
+                break;
+
+        case OBANK2:
+        case OBANK:
+                if (nearbymonst())
+                        return;
+                if (i == OBANK)
+                        lprcat("\n\nYou have found the bank of Larn.");
+                else
+                        lprcat("\n\nYou have found a branch office of the bank of Larn.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                j = 0;
+                while ((j != 'g') && (j != 'i') && (j != '\33'))
+                        j = ttgetch();
+                if (j == 'g') {
+                        if (i == OBANK)
+                                obank();
+                        else
+                                obank2();       /* the bank of larn  */
+                } else
+                        lprcat(" stay here");
+                break;
+
+        case ODEADFOUNTAIN:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nThere is a dead fountain here");
+                break;
+        case ODNDSTORE:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nThere is a DND store here.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g')
+                        dndstore();     /* the dnd adventurers store  */
+                else
+                        lprcat(" stay here");
+                break;
+
+        case OSTAIRSDOWN:
+                lprcat("\n\nThere is a circular staircase here");
+                ostairs(-1);    /* down */
+                break;
+
+        case OENTRANCE:
+                lprcat("\nYou have found ");
+                lprcat(objectname[OENTRANCE]);
+                lprcat("\nDo you (g) go inside");
+                iopts();
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g') {
+                        newcavelevel(1);
+                        playerx = 33;
+                        playery = MAXY - 2;
+                        item[33][MAXY - 1] = know[33][MAXY - 1] = mitem[33][MAXY - 1] = 0;
+                        draws(0, MAXX, 0, MAXY);
+                        bot_linex();
+                        return;
+                } else
+                        ignore();
+                break;
+
+        case OVOLDOWN:
+                lprcat("\nYou have found ");
+                lprcat(objectname[OVOLDOWN]);
+                lprcat("\nDo you (c) climb down");
+                iopts();
+                i = 0;
+                while ((i != 'c') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if ((i == '\33') || (i == 'i')) {
+                        ignore();
+                        break;
+                }
+                if (level != 0) {
+                        lprcat("\nThe shaft only extends 5 feet downward!");
+                        return;
+                }
+                if (packweight() > 45 + 3 * (c[STRENGTH] + c[STREXTRA])) {
+                        lprcat("\nYou slip and fall down the shaft");
+                        beep();
+                        lastnum = 275;
+                        losehp(30 + rnd(20));
+                        bottomhp();
+                } else
+                        lprcat("climb down");
+                nap(3000);
+                newcavelevel(MAXLEVEL);
+                for (i = 0; i < MAXY; i++)
+                        for (j = 0; j < MAXX; j++)      /* put player near
+                                                         * volcano shaft */
+                                if (item[j][i] == OVOLUP) {
+                                        playerx = j;
+                                        playery = i;
+                                        j = MAXX;
+                                        i = MAXY;
+                                        positionplayer();
+                                }
+                draws(0, MAXX, 0, MAXY);
+                bot_linex();
+                return;
+
+        case OVOLUP:
+                lprcat("\nYou have found ");
+                lprcat(objectname[OVOLUP]);
+                lprcat("\nDo you (c) climb up");
+                iopts();
+                i = 0;
+                while ((i != 'c') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if ((i == '\33') || (i == 'i')) {
+                        ignore();
+                        break;
+                }
+                if (level != 11) {
+                        lprcat("\nThe shaft only extends 8 feet upwards before you find a blockage!");
+                        return;
+                }
+                if (packweight() > 45 + 5 * (c[STRENGTH] + c[STREXTRA])) {
+                        lprcat("\nYou slip and fall down the shaft");
+                        beep();
+                        lastnum = 275;
+                        losehp(15 + rnd(20));
+                        bottomhp();
+                        return;
+                }
+                lprcat("climb up");
+                lflush();
+                nap(3000);
+                newcavelevel(0);
+                for (i = 0; i < MAXY; i++)
+                        for (j = 0; j < MAXX; j++)      /* put player near
+                                                         * volcano shaft */
+                                if (item[j][i] == OVOLDOWN) {
+                                        playerx = j;
+                                        playery = i;
+                                        j = MAXX;
+                                        i = MAXY;
+                                        positionplayer();
+                                }
+                draws(0, MAXX, 0, MAXY);
+                bot_linex();
+                return;
+
+        case OTRADEPOST:
+                if (nearbymonst())
+                        return;
+                lprcat("\nYou have found the Larn trading Post.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g')
+                        otradepost();
+                else
+                        lprcat("stay here");
+                return;
+
+        case OHOME:
+                if (nearbymonst())
+                        return;
+                lprcat("\nYou have found your way home.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g')
+                        ohome();
+                else
+                        lprcat("stay here");
+                return;
+
+        case OLRS:
+                if (nearbymonst())
+                        return;
+                lprcat("\n\nThere is an LRS office here.");
+                lprcat("\nDo you (g) go inside, or (i) stay here? ");
+                i = 0;
+                while ((i != 'g') && (i != 'i') && (i != '\33'))
+                        i = ttgetch();
+                if (i == 'g')
+                        olrs(); /* the larn revenue service */
+                else
+                        lprcat(" stay here");
+                break;
+
+        default:
+                finditem(i);
+                break;
+        };
+}
+
 /*
 	lookforobject
 
@@ -50,56 +348,11 @@ lookforobject(void)
 		ogold(i);
 		break;
 
-	case OPOTION:
-		lprcat("\n\nYou have found a magic potion");
-		i = iarg[playerx][playery];
-		if (potionname[i][0] != 0)
-			lprintf(" of%s", potionname[i]);
-		opotion(i);
-		break;
-
-	case OSCROLL:
-		lprcat("\n\nYou have found a magic scroll");
-		i = iarg[playerx][playery];
-		if (scrollname[i][0] != 0)
-			lprintf(" of%s", scrollname[i]);
-		oscroll(i);
-		break;
-
 	case OALTAR:
 		if (nearbymonst())
 			return;
 		lprcat("\n\nThere is a Holy Altar here!");
 		oaltar();
-		break;
-
-	case OBOOK:
-		lprcat("\n\nYou have found a book.");
-		obook();
-		break;
-
-	case OCOOKIE:
-		lprcat("\n\nYou have found a fortune cookie.");
-		ocookie();
-		break;
-
-	case OTHRONE:
-		if (nearbymonst())
-			return;
-		lprintf("\n\nThere is %s here!", objectname[i]);
-		othrone(0);
-		break;
-
-	case OTHRONE2:
-		if (nearbymonst())
-			return;
-		lprintf("\n\nThere is %s here!", objectname[i]);
-		othrone(1);
-		break;
-
-	case ODEADTHRONE:
-		lprintf("\n\nThere is %s here!", objectname[i]);
-		odeadthrone();
 		break;
 
 	case OORB:
@@ -112,34 +365,15 @@ lookforobject(void)
 		opit();
 		break;
 
-	case OSTAIRSUP:
-		lprcat("\n\nThere is a circular staircase here");
-		ostairs(1);	/* up */
-		break;
-
 	case OELEVATORUP:
 		lprcat("\n\nYou feel heavy for a moment, but the feeling disappears");
 		oelevator(1);	/* up  */
 		break;
 
-	case OFOUNTAIN:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nThere is a fountain here");
-		ofountain();
-		break;
-
-	case OSTATUE:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nYou are standing in front of a statue");
-		ostatue();
-		break;
-
-	case OCHEST:
-		lprcat("\n\nThere is a chest here");
-		ochest();
-		break;
+        case OELEVATORDOWN:
+                lprcat("\n\nYou feel light for a moment, but the feeling disappears");
+                oelevator(-1);  /* down  */
+                break;
 
 	case OIVTELETRAP:
 		if (rnd(11) < 6)
@@ -148,83 +382,12 @@ lookforobject(void)
 		know[playerx][playery] = 1;
 
 		/* FALLTHROUGH */
+
 	case OTELEPORTER:
 		lprcat("\nZaaaappp!  You've been teleported!\n");
 		beep();
 		nap(3000);
 		oteleport(0);
-		break;
-
-	case OSCHOOL:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nYou have found the College of Larn.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g') {
-			oschool();	/* the college of larn	 */
-		} else
-			lprcat(" stay here");
-		break;
-
-	case OMIRROR:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nThere is a mirror here");
-		omirror();
-		break;
-
-	case OBANK2:
-	case OBANK:
-		if (nearbymonst())
-			return;
-		if (i == OBANK)
-			lprcat("\n\nYou have found the bank of Larn.");
-		else
-			lprcat("\n\nYou have found a branch office of the bank of Larn.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		j = 0;
-		while ((j != 'g') && (j != 'i') && (j != '\33'))
-			j = ttgetch();
-		if (j == 'g') {
-			if (i == OBANK)
-				obank();
-			else
-				obank2();	/* the bank of larn  */
-		} else
-			lprcat(" stay here");
-		break;
-
-	case ODEADFOUNTAIN:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nThere is a dead fountain here");
-		break;
-
-	case ODNDSTORE:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nThere is a DND store here.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g')
-			dndstore();	/* the dnd adventurers store  */
-		else
-			lprcat(" stay here");
-		break;
-
-	case OSTAIRSDOWN:
-		lprcat("\n\nThere is a circular staircase here");
-		ostairs(-1);	/* down */
-		break;
-
-	case OELEVATORDOWN:
-		lprcat("\n\nYou feel light for a moment, but the feeling disappears");
-		oelevator(-1);	/* down	 */
 		break;
 
 	case OOPENDOOR:
@@ -296,108 +459,6 @@ lookforobject(void)
 		}
 		break;
 
-	case OENTRANCE:
-		lprcat("\nYou have found ");
-		lprcat(objectname[OENTRANCE]);
-		lprcat("\nDo you (g) go inside");
-		iopts();
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g') {
-			newcavelevel(1);
-			playerx = 33;
-			playery = MAXY - 2;
-			item[33][MAXY - 1] = know[33][MAXY - 1] = mitem[33][MAXY - 1] = 0;
-			draws(0, MAXX, 0, MAXY);
-			bot_linex();
-			return;
-		} else
-			ignore();
-		break;
-
-	case OVOLDOWN:
-		lprcat("\nYou have found ");
-		lprcat(objectname[OVOLDOWN]);
-		lprcat("\nDo you (c) climb down");
-		iopts();
-		i = 0;
-		while ((i != 'c') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if ((i == '\33') || (i == 'i')) {
-			ignore();
-			break;
-		}
-		if (level != 0) {
-			lprcat("\nThe shaft only extends 5 feet downward!");
-			return;
-		}
-		if (packweight() > 45 + 3 * (c[STRENGTH] + c[STREXTRA])) {
-			lprcat("\nYou slip and fall down the shaft");
-			beep();
-			lastnum = 275;
-			losehp(30 + rnd(20));
-			bottomhp();
-		} else
-			lprcat("climb down");
-		nap(3000);
-		newcavelevel(MAXLEVEL);
-		for (i = 0; i < MAXY; i++)
-			for (j = 0; j < MAXX; j++)	/* put player near
-							 * volcano shaft */
-				if (item[j][i] == OVOLUP) {
-					playerx = j;
-					playery = i;
-					j = MAXX;
-					i = MAXY;
-					positionplayer();
-				}
-		draws(0, MAXX, 0, MAXY);
-		bot_linex();
-		return;
-
-	case OVOLUP:
-		lprcat("\nYou have found ");
-		lprcat(objectname[OVOLUP]);
-		lprcat("\nDo you (c) climb up");
-		iopts();
-		i = 0;
-		while ((i != 'c') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if ((i == '\33') || (i == 'i')) {
-			ignore();
-			break;
-		}
-		if (level != 11) {
-			lprcat("\nThe shaft only extends 8 feet upwards before you find a blockage!");
-			return;
-		}
-		if (packweight() > 45 + 5 * (c[STRENGTH] + c[STREXTRA])) {
-			lprcat("\nYou slip and fall down the shaft");
-			beep();
-			lastnum = 275;
-			losehp(15 + rnd(20));
-			bottomhp();
-			return;
-		}
-		lprcat("climb up");
-		lflush();
-		nap(3000);
-		newcavelevel(0);
-		for (i = 0; i < MAXY; i++)
-			for (j = 0; j < MAXX; j++)	/* put player near
-							 * volcano shaft */
-				if (item[j][i] == OVOLDOWN) {
-					playerx = j;
-					playery = i;
-					j = MAXX;
-					i = MAXY;
-					positionplayer();
-				}
-		draws(0, MAXX, 0, MAXY);
-		bot_linex();
-		return;
-
 	case OTRAPARROWIV:
 		if (rnd(17) < 13)
 			return;	/* for an arrow trap */
@@ -454,59 +515,12 @@ lookforobject(void)
 		bot_linex();
 		return;
 
-
-	case OTRADEPOST:
-		if (nearbymonst())
-			return;
-		lprcat("\nYou have found the Larn trading Post.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g')
-			otradepost();
-		else
-			lprcat("stay here");
-		return;
-
-	case OHOME:
-		if (nearbymonst())
-			return;
-		lprcat("\nYou have found your way home.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g')
-			ohome();
-		else
-			lprcat("stay here");
-		return;
-
 	case OWALL:
 		break;
 
 	case OANNIHILATION:
 		died(283);
 		return;		/* annihilated by sphere of annihilation */
-
-	case OLRS:
-		if (nearbymonst())
-			return;
-		lprcat("\n\nThere is an LRS office here.");
-		lprcat("\nDo you (g) go inside, or (i) stay here? ");
-		i = 0;
-		while ((i != 'g') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if (i == 'g')
-			olrs();	/* the larn revenue service */
-		else
-			lprcat(" stay here");
-		break;
-
-	default:
-		finditem(i);
-		break;
 	};
 }
 

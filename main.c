@@ -725,6 +725,10 @@ parse(void)
 				viewflag = 1;
 			return;	/* stay here		 */
 
+		case ',':
+			lookforvolobject();
+			return;
+
 		case 'w':
 			yrepcount = 0;
 			wield();

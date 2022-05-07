@@ -182,6 +182,7 @@ void nap(int);
 
 /* object.c */
 void lookforobject(void);
+void lookforvolobject(void);
 void oteleport(int);
 void quaffpotion(int);
 void adjusttime(long);
