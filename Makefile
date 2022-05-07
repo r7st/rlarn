@@ -66,7 +66,7 @@ SRCS=	main.c object.c create.c tok.c display.c global.c data.c io.c \
 	signal.c action.c moreobj.c movem.c regen.c fortune.c savelev.c
 DPADD=	${LIBTERMINFO}
 #LDADD=	-lterminfo
-LDADD= -lbsd -lcurses
+LDADD= -lcurses
 HIDEGAME=hidegame
 SETGIDGAME=yes
 

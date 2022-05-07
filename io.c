@@ -76,6 +76,10 @@
 #include <errno.h>
 #include <ctype.h>
 
+#if __APPLE__
+#define tiparm tparm
+#endif
+
 #ifdef TERMIO
 #include <termio.h>
 #define sgttyb termio
