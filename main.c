@@ -725,7 +725,7 @@ parse(void)
 				viewflag = 1;
 			return;	/* stay here		 */
 
-		case ',':
+		case 'g':
 			lookforvolobject();
 			return;
 
@@ -918,7 +918,7 @@ parse(void)
 				lprcat("\nYou aren't wearing anything");
 			return;
 
-		case 'g':
+		case ',':
 			cursors();
 			lprintf("\nThe stuff you are carrying presently weighs %ld pounds", (long) packweight());
 			/* FALLTHROUGH */
