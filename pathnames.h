@@ -31,8 +31,18 @@
  *	@(#)pathnames.h	5.2 (Berkeley) 4/27/95
  */
 
-#define	_PATH_LOG		"/var/games/larn/llog12.0"
-#define	_PATH_SCORE		"/var/games/larn/lscore12.0"
-#define	_PATH_HELP		"/usr/share/games/larn/larn.help"
-#define	_PATH_LEVELS		"/usr/share/games/larn/larnmaze"
-#define	_PATH_PLAYERIDS		"/var/games/larn/playerids"
+#ifndef _PATH_LOG
+  #define	_PATH_LOG		"/var/games/larn/llog12.0"
+#endif
+#ifndef _PATH_SCORE
+  #define	_PATH_SCORE		"/var/games/larn/lscore12.0"
+#endif
+#ifndef _PATH_HELP
+  #define	_PATH_HELP		"/usr/share/games/larn/larn.help"
+#endif
+#ifndef _PATH_LEVELS
+  #define	_PATH_LEVELS		"/usr/share/games/larn/larnmaze"
+#endif
+#ifndef _PATH_PLAYERIDS
+  #define	_PATH_PLAYERIDS		"/var/games/larn/playerids"
+#endif

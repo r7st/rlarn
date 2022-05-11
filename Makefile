@@ -60,7 +60,28 @@
 .MAIN:          all
 PROG=	larn
 MAN=	larn.6
-CPPFLAGS+=-DBSD -DVER=12 -DSUBVER=0 -DNONAP -DUIDSCORE -DTERMIOS
+
+# Set the data and score dir locations here
+FILESDIR=./datfiles
+SCORESDIR=./scores
+
+PATH_LOG=${SCORESDIR}/llog12.0
+PATH_SCORE=${SCORESDIR}/lscore12.0
+PATH_HELP=${FILESDIR}/larn.help
+PATH_LEVELS=${FILESDIR}/larnmaze
+PATH_PLAYERIDS={SCORESDIR}/playerids
+
+CPPFLAGS+=-DBSD \
+          -DVER=12 \
+          -DSUBVER=0 \
+          -DNONAP \
+          -DUIDSCORE \
+          -DTERMIOS \
+          -D_PATH_LOG=\"${PATH_LOG}\" \
+          -D_PATH_SCORE=\"${PATH_SCORE}\" \
+          -D_PATH_HELP=\"${PATH_HELP}\" \
+          -D_PATH_LEVELS=\"${PATH_LEVELS}\" \
+          -D_PATH_PLAYERIDS=\"${PATH_PLAYERIDS}\"
 SRCS=	main.c object.c create.c tok.c display.c global.c data.c io.c \
 	monster.c store.c diag.c help.c config.c nap.c bill.c scores.c \
 	signal.c action.c moreobj.c movem.c regen.c fortune.c savelev.c
@@ -69,13 +90,6 @@ DPADD=	${LIBTERMINFO}
 LDADD= -lcurses
 HIDEGAME=hidegame
 SETGIDGAME=yes
-
-#.if ${MKSHARE} != "no"
-DAT=larnmaze larnopts larn.help
-FILES=${DAT:S@^@${.CURDIR}/datfiles/@g}
-#FILESDIR=/usr/share/games/larn
-FILESDIR=./share/larn
-#.endif
 
 COPTS.display.c += -Wno-format-nonliteral
 COPTS.monster.c += -Wno-format-nonliteral
