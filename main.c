@@ -725,6 +725,10 @@ parse(void)
 				viewflag = 1;
 			return;	/* stay here		 */
 
+		case 'g':
+			lookforvolobject();
+			return;
+
 		case 'w':
 			yrepcount = 0;
 			wield();
@@ -914,7 +918,7 @@ parse(void)
 				lprcat("\nYou aren't wearing anything");
 			return;
 
-		case 'g':
+		case ',':
 			cursors();
 			lprintf("\nThe stuff you are carrying presently weighs %ld pounds", (long) packweight());
 			/* FALLTHROUGH */
