@@ -1,3 +1,13 @@
 Fork of NetBSD Larn for Linux: https://github.com/r7st/larn
 
+Notable Changes:
+Builds on MacOS - not just Linux
+Standing on items/stairs/fountains/etc. does not prompt for interaction unless you press 'g'.
+
+Compile with:
+MAKESYSPATH=mk bmake
+
+Play with:
+./larn
+
 - r7st (r7st.guru@gmail.com)
