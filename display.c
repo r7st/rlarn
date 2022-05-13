@@ -490,7 +490,7 @@ showplayer(void)
 short           diroffx[] = {0, 0, 1, 0, -1, 1, -1, 1, -1};
 short           diroffy[] = {0, 1, 0, -1, 0, -1, -1, 1, 1};
 int
-moveplayer(int dir)
+moveplayer(int dir, int running)
 				/* from = present room #  direction =
 				 * [1-north] [2-east] [3-south] [4-west]
 				 * [5-northeast] [6-northwest] [7-southeast]
@@ -509,6 +509,22 @@ moveplayer(int dir)
 	}
 	i = item[kk][mm];
 	j = mitem[kk][mm];
+	if (running == RUNNING) {
+		running = WALKING;
+		switch (i) {
+			case OALTAR:
+			case OPIT:
+			case ODARTRAP:
+			case OTRAPARROWIV:
+			case OTRAPARROW:
+			case OTRAPDOOR: break;;
+			default: running = RUNNING;
+		};
+		if (running == WALKING) {
+			nomove=1;
+			return (yrepcount = 0);
+		}
+	}
 	if (i == OWALL && c[WTW] == 0) {
 		nomove = 1;
 		return (yrepcount = 0);
