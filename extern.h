@@ -67,7 +67,7 @@ void drawscreen(void);
 void showcell(int, int);
 void show1cell(int, int);
 void showplayer(void);
-int moveplayer(int);
+int moveplayer(int, int);
 void seemagic(int);
 
 /* fortune.c */
