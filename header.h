@@ -29,6 +29,8 @@
 /* the tax rate for the LRS */
 #define MAXOBJ 93
 /* the maximum number of objects   n < MAXOBJ */
+#define CHAR_MOD .01
+/* the charisma modifier for shops */
 
 /* this is the structure definition of the monster data	 */
 struct monst {
@@ -48,7 +50,7 @@ struct monst {
 
 /* this is the structure definition for the items in the dnd store */
 struct _itm {
-	short           price;
+	int             price;
 	u_char          obj;
 	u_char          arg;
 	char            qty;
