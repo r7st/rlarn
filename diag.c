@@ -16,7 +16,6 @@
 #include "extern.h"
 
 static void greedy(void);
-static void fsorry(void);
 static void fcheat(void);
 
 static struct tms cputime;
@@ -313,10 +312,6 @@ restoregame(char *fname)
 	fstat(io_infd, &filetimes);
 	lrfill((char *) &zzz, sizeof(long));
 	zzz += 6;
-	if (filetimes.st_ctime > zzz)
-		fsorry();	/* file create time	 */
-	else if (filetimes.st_mtime > zzz)
-		fsorry();	/* file modify time	 */
 	if (c[HP] < 0) {
 		died(284);
 		return;
@@ -324,8 +319,6 @@ restoregame(char *fname)
 	oldx = oldy = 0;
 	/* XXX the following will break on 64-bit inode numbers */
 	i = larn_lrint();		/* inode # */
-	if (i && (filetimes.st_ino != (ino_t) i))
-		fsorry();
 	lrclose();
 	if (strcmp(fname, ckpfile) == 0) {
 		if (lappend(fname) < 0)
@@ -373,20 +366,6 @@ greedy(void)
 	c[GOLD] = c[BANKACCOUNT] = 0;
 	died(-267);
 	return;
-}
-
-/*
-	subroutine to not allow altered save files and terminate the attempted
-	restart
- */
-static void
-fsorry(void)
-{
-	lprcat("\nSorry, but your savefile has been altered.\n");
-	lprcat("However, seeing as I am a good sport, I will let you play.\n");
-	lprcat("Be advised though, you won't be placed on the normal scoreboard.");
-	cheat = 1;
-	nap(4000);
 }
 
 /*
