@@ -81,10 +81,17 @@ static const char *flines[] = {
 	"the greatest weapon in the game has not the highest Weapon Class",
 	"you can't buy the most powerful scroll",
 	"identify things before you use them",
-	"there's more than one way through a wall"
+	"there's more than one way through a wall",
+	"blasphemy is dangerous!",
+	"where's the food anyway?",
+	"shops won't buy unidentified items",
+	"that lance will be the death of you",
+	"is there a moonsword?",
+	"dress well for a discount",
+	"some people are cursed with sweaty palms"
 };
 
-#define NFORTUNES	34
+#define NFORTUNES	41
 
 const char *
 fortune(void)
