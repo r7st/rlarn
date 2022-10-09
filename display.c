@@ -611,7 +611,7 @@ seemagic(int arg)
 		count = 2;
 		seepage();
 	}
-	lprcat("\nThe magic potions you have found to date are:\n\n");
+	lprcat("\nThe magic tinctures you have found to date are:\n\n");
 	count = 0;
 	for (i = 0; i < MAXPOTION; i++)
 		if (potionname[i][0])

@@ -190,7 +190,7 @@ const char     *objectname[] =
 	"ring of extra regeneration", "a ring of regeneration", "a ring of protection",
 	"an energy ring", "a ring of dexterity", "a ring of strength",
 	"a ring of cleverness", "a ring of increase damage", "a belt of striking",
-	"a magic scroll", "a magic potion", "a book", "a chest",
+	"a magic scroll", "a magic tincture", "a book", "a chest",
 	"an amulet of invisibility", "an orb of dragon slaying",
 	"a scarab of negate spirit", "a cube of undead control",
 	"device of theft prevention", "a brilliant diamond", "a ruby",
