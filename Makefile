@@ -82,6 +82,9 @@ SRCS=   main.c object.c create.c tok.c display.c global.c data.c io.c \
 OBJS:= $(addsuffix .o,$(basename $(SRCS)))
 
 LDFLAGS= -lcurses
+ifeq ($(shell uname), Linux)
+  LDFLAGS+= -lbsd -lm
+endif
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
