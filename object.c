@@ -315,6 +315,25 @@ lookforvolobject(void)
 			lprcat(" stay here");
 		break;
 
+	case OOPENDOOR:
+		lprintf("\n\nYou have found %s", objectname[i]);
+		lprcat("\nDo you (c) close it");
+		iopts();
+		i = 0;
+		while ((i != 'c') && (i != 'i') && (i != '\33'))
+			i = ttgetch();
+		if ((i == '\33') || (i == 'i')) {
+			ignore();
+			break;
+		}
+		lprcat("close");
+		forget();
+		item[playerx][playery] = OCLOSEDDOOR;
+		iarg[playerx][playery] = 0;
+		playerx = lastpx;
+		playery = lastpy;
+		break;
+
 	default:
 		finditem(i);
 		break;
@@ -388,25 +407,6 @@ lookforobject(void)
 		beep();
 		nap(3000);
 		oteleport(0);
-		break;
-
-	case OOPENDOOR:
-		lprintf("\n\nYou have found %s", objectname[i]);
-		lprcat("\nDo you (c) close it");
-		iopts();
-		i = 0;
-		while ((i != 'c') && (i != 'i') && (i != '\33'))
-			i = ttgetch();
-		if ((i == '\33') || (i == 'i')) {
-			ignore();
-			break;
-		}
-		lprcat("close");
-		forget();
-		item[playerx][playery] = OCLOSEDDOOR;
-		iarg[playerx][playery] = 0;
-		playerx = lastpx;
-		playery = lastpy;
 		break;
 
 	case OCLOSEDDOOR:
