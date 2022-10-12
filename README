@@ -2,9 +2,10 @@ Fork of NetBSD Larn for Linux: https://github.com/r7st/larn
 
 Notable Changes:
 Builds on MacOS - not just Linux
-Standing on items/stairs/fountains/etc. does not prompt for interaction unless you press 'g'.
+Standing on items/stairs/fountains/open doors/etc. does not prompt for interaction unless you press 'g'.
 Charisma stat improves/worsens shop prices by 1% per level above/below 12.
 Saves can be backed up without the game considering it cheating.
+Basic weapons/armors renamed for flavor, no stat changes. Potions renamed to tinctures.
 
 Compile with gnu make:
 On Linux/MacOS: `make`
