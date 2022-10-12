@@ -1,6 +1,3 @@
-#	$NetBSD: Makefile,v 1.21 2011/08/16 11:19:41 christos Exp $
-#	@(#)Makefile	5.12 (Berkeley) 5/30/93
-
 # EXTRA
 #	Incorporates code to gather additional performance statistics
 #
@@ -55,13 +52,8 @@
 # NOLOG
 #	Turn off logging.
 
-.include <bsd.own.mk>
+TARGET=larn
 
-.MAIN:          all
-PROG=	larn
-MAN=	larn.6
-
-# Set the data and score dir locations here
 FILESDIR=./datfiles
 SCORESDIR=./scores
 
@@ -71,27 +63,32 @@ PATH_HELP=${FILESDIR}/larn.help
 PATH_LEVELS=${FILESDIR}/larnmaze
 PATH_PLAYERIDS={SCORESDIR}/playerids
 
-CPPFLAGS+=-DBSD \
-          -DVER=12 \
-          -DSUBVER=0 \
-          -DNONAP \
-          -DUIDSCORE \
-          -DTERMIOS \
-          -D_PATH_LOG=\"${PATH_LOG}\" \
-          -D_PATH_SCORE=\"${PATH_SCORE}\" \
-          -D_PATH_HELP=\"${PATH_HELP}\" \
-          -D_PATH_LEVELS=\"${PATH_LEVELS}\" \
-          -D_PATH_PLAYERIDS=\"${PATH_PLAYERIDS}\"
-SRCS=	main.c object.c create.c tok.c display.c global.c data.c io.c \
-	monster.c store.c diag.c help.c config.c nap.c bill.c scores.c \
-	signal.c action.c moreobj.c movem.c regen.c fortune.c savelev.c
-DPADD=	${LIBTERMINFO}
-#LDADD=	-lterminfo
-LDADD= -lcurses
-HIDEGAME=hidegame
-SETGIDGAME=yes
+CFLAGS+=-DBSD \
+        -DVER=12 \
+        -DSUBVER=0 \
+        -DNONAP \
+        -DUIDSCORE \
+        -DTERMIOS \
+        -D_PATH_LOG=\"${PATH_LOG}\" \
+        -D_PATH_SCORE=\"${PATH_SCORE}\" \
+        -D_PATH_HELP=\"${PATH_HELP}\" \
+        -D_PATH_LEVELS=\"${PATH_LEVELS}\" \
+        -D_PATH_PLAYERIDS=\"${PATH_PLAYERIDS}\"
 
-COPTS.display.c += -Wno-format-nonliteral
-COPTS.monster.c += -Wno-format-nonliteral
+SRCS=   main.c object.c create.c tok.c display.c global.c data.c io.c \
+        monster.c store.c diag.c help.c config.c nap.c bill.c scores.c \
+        signal.c action.c moreobj.c movem.c regen.c fortune.c savelev.c
 
-.include <bsd.prog.mk>
+OBJS:= $(addsuffix .o,$(basename $(SRCS)))
+
+LDFLAGS= -lcurses
+ifeq ($(shell uname), Linux)
+  LDFLAGS+= -lbsd -lm
+endif
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+
+.PHONY: clean
+clean:
+	$(RM) $(TARGET) $(OBJS)
