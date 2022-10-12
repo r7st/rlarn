@@ -339,8 +339,7 @@ dnditem(int i)
 	}
 	lprintf("%c) ", (i % 26) + 'a');
 	if (itm[i].obj == OPOTION) {
-		//lprintf("tincture of%s", potionhide[itm[i].arg]);
-		lprintf("\b%s tincture", potionhide[itm[i].arg]);
+		lprintf("tincture of%s", potionhide[itm[i].arg]);
 	} else if (itm[i].obj == OSCROLL) {
 		lprintf("scroll of%s", scrollhide[itm[i].arg]);
 	} else
