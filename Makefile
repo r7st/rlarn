@@ -86,6 +86,10 @@ ifeq ($(shell uname), Linux)
   LDFLAGS+= -lbsd -lm
 endif
 
+ifeq ($(shell uname), OpenBSD)
+  LDFLAGS+= -lm
+endif
+
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
