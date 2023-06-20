@@ -2,3 +2,4 @@
 larn
 main.d
 scores/*
+!scores/.placeholder
