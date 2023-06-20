@@ -1,14 +1,14 @@
-Fork of NetBSD Larn for Linux: https://github.com/r7st/larn
+Fork of NetBSD Larn for Linux/MacOS/OpenBSD: https://github.com/r7st/larn
 
 Notable Changes:
-Builds on MacOS - not just Linux
-Standing on items/stairs/fountains/etc. does not prompt for interaction unless you press 'g'.
-Charisma stat improves/worsens shop prices by 1% per level above/below 12.
+Builds on Linux/MacOS/OpenBSD with GNU make.
+Standing on items/stairs/fountains/etc. does not prompt for interaction unless you press "g".
+Running will stop before a visible trap, rather than on top of it.
 Saves can be backed up without the game considering it cheating.
 
-Compile with gnu make:
-On Linux/MacOS: `make`
-On *BSD: `gmake`
+Compile with GNU make:
+On Linux/MacOS: "make"
+On *BSD: "gmake"
 
 Play with:
 ./larn
