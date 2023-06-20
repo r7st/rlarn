@@ -40,7 +40,6 @@ static char     sccsid[] = "@(#)store.c	5.4 (Berkeley) 5/13/91";
 /* store.c		Larn is copyrighted 1986 by Noah Morgan. */
 #include "header.h"
 #include "extern.h"
-#include <math.h>
 
 static void handsfull(void);
 static void outofstock(void);
@@ -50,7 +49,6 @@ static void banktitle(const char *);
 static void obanksub(void);
 static void otradhead(void);
 static void cnsitm(void);
-static int modify_price(int);
 
 static int      dndcount = 0, dnditm = 0;
 
@@ -64,129 +62,129 @@ struct _itm     itm[90] = {
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{20, OLEATHER, 0, 3},
-	{100, OSTUDLEATHER, 0, 2},
-	{400, ORING, 0, 2},
-	{850, OCHAIN, 0, 2},
-	{2200, OSPLINT, 0, 1},
-	{4000, OPLATE, 0, 1},
-	{9000, OPLATEARMOR, 0, 1},
-	{26000, OSSPLATE, 0, 1},
-	{1500, OSHIELD, 0, 1},
+	{2, OLEATHER, 0, 3},
+	{10, OSTUDLEATHER, 0, 2},
+	{40, ORING, 0, 2},
+	{85, OCHAIN, 0, 2},
+	{220, OSPLINT, 0, 1},
+	{400, OPLATE, 0, 1},
+	{900, OPLATEARMOR, 0, 1},
+	{2600, OSSPLATE, 0, 1},
+	{150, OSHIELD, 0, 1},
 
 	/*
 	 * cost	 	iven name		iven arg   how gp
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{20, ODAGGER, 0, 3},
-	{200, OSPEAR, 0, 3},
-	{800, OFLAIL, 0, 2},
-	{1500, OBATTLEAXE, 0, 2},
-	{4500, OLONGSWORD, 0, 2},
-	{10000, O2SWORD, 0, 2},
-	{50000, OSWORD, 0, 1},
-	{165000, OLANCE, 0, 1},
-	{60000, OSWORDofSLASHING, 0, 0},
-	{100000, OHAMMER, 0, 0},
+	{2, ODAGGER, 0, 3},
+	{20, OSPEAR, 0, 3},
+	{80, OFLAIL, 0, 2},
+	{150, OBATTLEAXE, 0, 2},
+	{450, OLONGSWORD, 0, 2},
+	{1000, O2SWORD, 0, 2},
+	{5000, OSWORD, 0, 1},
+	{16500, OLANCE, 0, 1},
+	{6000, OSWORDofSLASHING, 0, 0},
+	{10000, OHAMMER, 0, 0},
 
 	/*
 	 * cost		iven name		iven arg   how gp
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{1500, OPROTRING, 1, 1},
-	{850, OSTRRING, 1, 1},
-	{1200, ODEXRING, 1, 1},
-	{1200, OCLEVERRING, 1, 1},
-	{1800, OENERGYRING, 0, 1},
-	{1250, ODAMRING, 0, 1},
-	{2200, OREGENRING, 0, 1},
-	{10000, ORINGOFEXTRA, 0, 1},
+	{150, OPROTRING, 1, 1},
+	{85, OSTRRING, 1, 1},
+	{120, ODEXRING, 1, 1},
+	{120, OCLEVERRING, 1, 1},
+	{180, OENERGYRING, 0, 1},
+	{125, ODAMRING, 0, 1},
+	{220, OREGENRING, 0, 1},
+	{1000, ORINGOFEXTRA, 0, 1},
 
-	{2800, OBELT, 0, 1},
+	{280, OBELT, 0, 1},
 
-	{4000, OAMULET, 0, 1},
+	{400, OAMULET, 0, 1},
 
-	{65000, OORBOFDRAGON, 0, 0},
-	{55000, OSPIRITSCARAB, 0, 0},
-	{50000, OCUBEofUNDEAD, 0, 0},
-	{60000, ONOTHEFT, 0, 0},
+	{6500, OORBOFDRAGON, 0, 0},
+	{5500, OSPIRITSCARAB, 0, 0},
+	{5000, OCUBEofUNDEAD, 0, 0},
+	{6000, ONOTHEFT, 0, 0},
 
-	{5900, OCHEST, 6, 1},
-	{2000, OBOOK, 8, 1},
-	{100, OCOOKIE, 0, 3},
-
-	/*
-	 * cost		iven name		iven arg   how gp
-	 * iven[]		ivenarg[]  many
-	 */
-
-	{200, OPOTION, 0, 6},
-	{900, OPOTION, 1, 5},
-	{5200, OPOTION, 2, 1},
-	{1000, OPOTION, 3, 2},
-	{500, OPOTION, 4, 2},
-	{1500, OPOTION, 5, 2},
-	{700, OPOTION, 6, 1},
-	{300, OPOTION, 7, 7},
-	{2000, OPOTION, 8, 1},
-	{500, OPOTION, 9, 1},
-	{800, OPOTION, 10, 1},
+	{590, OCHEST, 6, 1},
+	{200, OBOOK, 8, 1},
+	{10, OCOOKIE, 0, 3},
 
 	/*
 	 * cost		iven name		iven arg   how gp
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{300, OPOTION, 11, 3},
-	{200, OPOTION, 12, 5},
-	{400, OPOTION, 13, 3},
-	{350, OPOTION, 14, 2},
-	{5200, OPOTION, 15, 1},
-	{900, OPOTION, 16, 2},
-	{2000, OPOTION, 17, 2},
-	{2200, OPOTION, 18, 4},
-	{800, OPOTION, 19, 6},
-	{3700, OPOTION, 20, 3},
-	{500, OPOTION, 22, 1},
-	{1500, OPOTION, 23, 3},
+	{20, OPOTION, 0, 6},
+	{90, OPOTION, 1, 5},
+	{520, OPOTION, 2, 1},
+	{100, OPOTION, 3, 2},
+	{50, OPOTION, 4, 2},
+	{150, OPOTION, 5, 2},
+	{70, OPOTION, 6, 1},
+	{30, OPOTION, 7, 7},
+	{200, OPOTION, 8, 1},
+	{50, OPOTION, 9, 1},
+	{80, OPOTION, 10, 1},
 
 	/*
 	 * cost		iven name		iven arg   how gp
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{1000, OSCROLL, 0, 2},
-	{1250, OSCROLL, 1, 2},
-	{600, OSCROLL, 2, 4},
-	{100, OSCROLL, 3, 4},
-	{1000, OSCROLL, 4, 3},
-	{2000, OSCROLL, 5, 2},
-	{1100, OSCROLL, 6, 1},
-	{5000, OSCROLL, 7, 2},
-	{2000, OSCROLL, 8, 2},
-	{2500, OSCROLL, 9, 4},
-	{200, OSCROLL, 10, 5},
-	{300, OSCROLL, 11, 3},
+	{30, OPOTION, 11, 3},
+	{20, OPOTION, 12, 5},
+	{40, OPOTION, 13, 3},
+	{35, OPOTION, 14, 2},
+	{520, OPOTION, 15, 1},
+	{90, OPOTION, 16, 2},
+	{200, OPOTION, 17, 2},
+	{220, OPOTION, 18, 4},
+	{80, OPOTION, 19, 6},
+	{370, OPOTION, 20, 3},
+	{50, OPOTION, 22, 1},
+	{150, OPOTION, 23, 3},
+
+	/*
+	 * cost		iven name		iven arg   how gp
+	 * iven[]		ivenarg[]  many
+	 */
+
+	{100, OSCROLL, 0, 2},
+	{125, OSCROLL, 1, 2},
+	{60, OSCROLL, 2, 4},
+	{10, OSCROLL, 3, 4},
+	{100, OSCROLL, 4, 3},
+	{200, OSCROLL, 5, 2},
+	{110, OSCROLL, 6, 1},
+	{500, OSCROLL, 7, 2},
+	{200, OSCROLL, 8, 2},
+	{250, OSCROLL, 9, 4},
+	{20, OSCROLL, 10, 5},
+	{30, OSCROLL, 11, 3},
 
 	/*
 	 * cost 		iven name		iven arg   how gp
 	 * iven[]		ivenarg[]  many
 	 */
 
-	{3400, OSCROLL, 12, 1},
-	{3400, OSCROLL, 13, 1},
-	{3000, OSCROLL, 14, 2},
-	{4000, OSCROLL, 15, 2},
-	{5000, OSCROLL, 16, 2},
-	{10000, OSCROLL, 17, 1},
-	{5000, OSCROLL, 18, 1},
-	{3400, OSCROLL, 19, 2},
-	{2200, OSCROLL, 20, 3},
-	{39000, OSCROLL, 21, 0},
-	{6100, OSCROLL, 22, 1},
-	{30000, OSCROLL, 23, 0}
+	{340, OSCROLL, 12, 1},
+	{340, OSCROLL, 13, 1},
+	{300, OSCROLL, 14, 2},
+	{400, OSCROLL, 15, 2},
+	{500, OSCROLL, 16, 2},
+	{1000, OSCROLL, 17, 1},
+	{500, OSCROLL, 18, 1},
+	{340, OSCROLL, 19, 2},
+	{220, OSCROLL, 20, 3},
+	{3900, OSCROLL, 21, 0},
+	{610, OSCROLL, 22, 1},
+	{3000, OSCROLL, 23, 0}
 };
 
 /*
@@ -232,12 +230,6 @@ nogold(void)
 	lprcat("\nYou don't have enough gold to pay for that!");
 	lflush();
 	nap(2200);
-}
-
-static int
-modify_price(int price)
-{
-	return (int) floor((float) (1 - ((c[CHARISMA] - 12) * CHAR_MOD)) * (float) price);
 }
 
 void
@@ -301,7 +293,7 @@ dndstore(void)
 				outofstock();
 			else if (pocketfull())
 				handsfull();
-			else if (c[GOLD] < modify_price(itm[i].price))
+			else if (c[GOLD] < itm[i].price * 10)
 				nogold();
 			else {
 				if (itm[i].obj == OPOTION) {
@@ -309,7 +301,7 @@ dndstore(void)
 				} else if (itm[i].obj == OSCROLL) {
 					scrollname[itm[i].arg] = scrollhide[itm[i].arg];
 				}
-				c[GOLD] -= modify_price(itm[i].price);
+				c[GOLD] -= itm[i].price * 10;
 				itm[i].qty--;
 				take(itm[i].obj, itm[i].arg);
 				if (itm[i].qty == 0)
@@ -345,7 +337,7 @@ dnditem(int i)
 	} else
 		lprintf("%s", objectname[itm[i].obj]);
 	cursor(j + 31, k);
-	lprintf("%6ld", (long) modify_price(itm[i].price));
+	lprintf("%6ld", (long) (itm[i].price * 10));
 }
 
 
@@ -815,10 +807,10 @@ otradepost(void)
 						    || (iven[isub] == OEMERALD) || (iven[isub] == OSAPPHIRE))
 							value = 20 * ivenarg[isub];
 						else if ((itm[j].obj == OSCROLL) || (itm[j].obj == OPOTION))
-							value = modify_price((int) (0.2 * (float) itm[j + ivenarg[isub]].price));
+							value = 2 * itm[j + ivenarg[isub]].price;
 						else {
 							izarg = ivenarg[isub];
-							value = modify_price(itm[j].price / 10);   /* appreciate if a +n
+							value = itm[j].price;	/* appreciate if a +n
 										 * object */
 							if (izarg >= 0)
 								value *= 2;
