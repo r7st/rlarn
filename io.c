@@ -80,6 +80,10 @@
 #define tiparm tparm
 #endif
 
+#if __OpenBSD__
+#define tiparm tparm
+#endif
+
 #ifdef TERMIO
 #include <termio.h>
 #define sgttyb termio

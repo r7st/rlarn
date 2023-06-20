@@ -672,49 +672,49 @@ parse(void)
 		switch (k) {	/* get the token from the input and switch on
 				 * it	 */
 		case 'h':
-			moveplayer(4);
+			moveplayer(4, WALKING);
 			return;	/* west		 */
 		case 'H':
 			run(4);
 			return;	/* west		 */
 		case 'l':
-			moveplayer(2);
+			moveplayer(2, WALKING);
 			return;	/* east		 */
 		case 'L':
 			run(2);
 			return;	/* east		 */
 		case 'j':
-			moveplayer(1);
+			moveplayer(1, WALKING);
 			return;	/* south		 */
 		case 'J':
 			run(1);
 			return;	/* south		 */
 		case 'k':
-			moveplayer(3);
+			moveplayer(3, WALKING);
 			return;	/* north		 */
 		case 'K':
 			run(3);
 			return;	/* north		 */
 		case 'u':
-			moveplayer(5);
+			moveplayer(5, WALKING);
 			return;	/* northeast	 */
 		case 'U':
 			run(5);
 			return;	/* northeast	 */
 		case 'y':
-			moveplayer(6);
+			moveplayer(6, WALKING);
 			return;	/* northwest	 */
 		case 'Y':
 			run(6);
 			return;	/* northwest	 */
 		case 'n':
-			moveplayer(7);
+			moveplayer(7, WALKING);
 			return;	/* southeast	 */
 		case 'N':
 			run(7);
 			return;	/* southeast	 */
 		case 'b':
-			moveplayer(8);
+			moveplayer(8, WALKING);
 			return;	/* southwest	 */
 		case 'B':
 			run(8);
@@ -724,6 +724,10 @@ parse(void)
 			if (yrepcount)
 				viewflag = 1;
 			return;	/* stay here		 */
+
+		case 'g':
+			lookforvolobject();
+			return;
 
 		case 'w':
 			yrepcount = 0;
@@ -914,7 +918,7 @@ parse(void)
 				lprcat("\nYou aren't wearing anything");
 			return;
 
-		case 'g':
+		case ',':
 			cursors();
 			lprintf("\nThe stuff you are carrying presently weighs %ld pounds", (long) packweight());
 			/* FALLTHROUGH */
@@ -989,7 +993,7 @@ run(int dir)
 	int    i;
 	i = 1;
 	while (i) {
-		i = moveplayer(dir);
+		i = moveplayer(dir, RUNNING);
 		if (i > 0) {
 			if (c[HASTEMONST])
 				movemonst();

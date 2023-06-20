@@ -30,6 +30,9 @@
 #define MAXOBJ 93
 /* the maximum number of objects   n < MAXOBJ */
 
+#define RUNNING 1
+#define WALKING 0
+
 /* this is the structure definition of the monster data	 */
 struct monst {
 	const char     *name;
