@@ -38,7 +38,7 @@ lookforvolobject(void)
 	yrepcount = 0;
 	switch (i) {
 	case OPOTION:
-		lprcat("\n\nYou have found a magic tincture");
+		lprcat("\n\nYou have found a magic potion");
 		i = iarg[playerx][playery];
 		if (potionname[i][0] != 0)
 			lprintf(" of%s", potionname[i]);
@@ -791,7 +791,7 @@ quaffpotion(int pot)
 		 /* monster detection	 */ return;
 
 	case 12:
-		lprcat("\nThis tincture has no taste to it");
+		lprcat("\nThis potion has no taste to it");
 		return;
 
 	case 15:
